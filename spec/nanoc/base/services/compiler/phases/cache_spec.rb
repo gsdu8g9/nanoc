@@ -90,7 +90,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
         it 'does not change compiled content cache' do
           expect { subject }
-            .not_to change { compiled_content_cache[rep] }
+            .not_to change { compiled_content_cache[rep][:last].string }
         end
 
         it 'sends notification' do
