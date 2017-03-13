@@ -222,16 +222,16 @@ module Nanoc::CLI::Commands
       protected
 
       def table_for_summary(name)
-        headers = [name.to_s, 'count', 'min', 'avg', 'max', 'tot']
+        headers = [name.to_s, 'count', '50p', '90p', '99p', 'tot']
 
         rows = @telemetry.summary(name).map do |filter_name, summary|
           count = summary.count
-          min   = summary.min
-          avg   = summary.avg
+          p50   = summary.quantile(0.50)
+          p90   = summary.quantile(0.90)
+          p99   = summary.quantile(0.99)
           tot   = summary.sum
-          max   = summary.max
 
-          [filter_name, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
+          [filter_name, count.to_s] + [p50, p90, p99, tot].map { |r| "#{format('%4.2f', r)}s" }
         end
 
         [headers] + rows
